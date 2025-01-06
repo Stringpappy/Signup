@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .profile-container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .profile-header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .profile-info {
+            margin-bottom: 15px;
+        }
+        .profile-info label {
+            font-weight: bold;
+        }
+        .profile-info p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-header">User Profile</div>
+        
+        <div id="profile-info">
+            <p>Loading...</p>
+        </div>
+    </div>
+
+    <script>
+        // Get the user id from the current logged-in user (assuming you have it available in a variable or from the page context)
+        const userId = 1; // Change this with dynamic user ID, e.g., using Django template tags or JavaScript
+
+        // API endpoint to fetch the user profile
+        const profileUrl = `/api/clients/${userId}/`;
+
+        // Fetch the client data from the API
+        fetch(profileUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Profile not found');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Display the client profile information
+                const profileInfo = `
+                    <div class="profile-info">
+                        <label>Username:</label>
+                        <p>${data.user}</p>
+                    </div>
+                    <div class="profile-info">
+                        <label>Date of Birth:</label>
+                        <p>${data.date_of_birth}</p>
+                    </div>
+                    <div class="profile-info">
+                        <label>Gender:</label>
+                        <p>${data.gender}</p>
+                    </div>
+                    <div class="profile-info">
+                        <label>Service Needed:</label>
+                        <p>${data.service_needed}</p>
+                    </div>
+                    <div class="profile-info">
+                        <label>Location:</label>
+                        <p>${data.location}</p>
+                    </div>
+                    <div class="profile-info">
+                        <label>Address:</label>
+                        <p>${data.address}</p>
+                    </div>
+                `;
+                document.getElementById('profile-info').innerHTML = profileInfo;
+            })
+            .catch(error => {
+                // Handle errors
+                document.getElementById('profile-info').innerHTML = `
+                    <p>Error: ${error.message}</p>
+                `;
+            });
+    </script>
+</body>
+</html>
