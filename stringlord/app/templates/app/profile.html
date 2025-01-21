@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 80%;
+            max-width: 600px;
+        }
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+        }
+        .profile-field {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .field-value {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #333;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+        .alert {
+            color: #f44336;
+            background-color: #ffcccc;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        async function fetchProfile() {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                alert('You are not logged in!');
+                window.location.href = '/login.html';
+                return;
+            }
+            const response = await fetch('http://127.0.0.1:8000/api/profile/', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const result = await response.json();
+            if (response.ok) {
+                // Assuming result contains username, email, and full_name
+                document.getElementById('username').innerText = result.username || 'Not available';
+                document.getElementById('email').innerText = result.email || 'Not available';
+                document.getElementById('first_name').innerText = result.first_name || 'Not available';
+		document.getElementById('last_name').innerText = result.last_name || 'Not available';
+            } else {
+                alert(result.error);
+                window.location.href = '/login.html';
+            }
+        }
+        window.onload = fetchProfile;
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Profile</h1>
+        <div class="profile-field">
+            <label for="username">Username:</label>
+            <div id="username" class="field-value">Loading...</div>
+        </div>
+        <div class="profile-field">
+            <label for="email">Email:</label>
+            <div id="email" class="field-value">Loading...</div>
+        </div>
+        <div class="profile-field">
+            <label for="first_name">First Name:</label>
+            <div id="first_name" class="field-value">Loading...</div>
+        </div>
+	<div class="profile-field">                                                       
+		<label for="last_name">Last Name:</label>                                
+		<div id="last_name" class="field-value">Loading...</div>                      
+	</div>
+</body>
+</html>
