@@ -1,0 +1,37 @@
+<!-- client_reg.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Client Registration</title>
+    <script>
+        async function registerClient(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries());
+
+            const response = await fetch('/api/create/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            alert(result.message || result.error);
+        }
+    </script>
+</head>
+<body>
+    <h1>Client Signup</h1>
+    <form onsubmit="registerClient(event)">
+        <label>Email: <input type="email" name="email" required></label><br>
+        <label>Username: <input type="text" name="username" required></label><br>
+        <label>First Name: <input type="text" name="first_name" required></label><br>
+        <label>Last Name: <input type="text" name="last_name" required></label><br>
+        <label>Password: <input type="password" name="password" required></label><br>
+        <label>Service Needed: <input type="text" name="service_needed" required></label><br>
+        <button type="submit">Register</button>
+    </form>
+
+</body>
+</html>
+
